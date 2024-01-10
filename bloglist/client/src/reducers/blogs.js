@@ -8,8 +8,16 @@ const blogsSlice = createSlice({
   reducers: {
     blogsLoaded: (state, action) => action.payload,
     blogAdded: (state, action) => state.concat(action.payload),
+    blogLiked: (state, action) =>
+      state.map((blog) =>
+        blog.id !== action.payload.id ? blog : action.payload
+      ),
+    blogRemoved: (state, action) =>
+      state.filter((blog) => blog.id !== action.payload),
   },
 });
+
+const { blogAdded, blogsLoaded, blogLiked, blogRemoved } = blogsSlice.actions;
 
 export const loadBlogs = () => async (dispatch) => {
   const blogs = await blogsService.getAll();
@@ -26,5 +34,22 @@ export const addBlog = (blogData) => async (dispatch) => {
   }
 };
 
-export const { blogAdded, blogsLoaded } = blogsSlice.actions;
+export const likeBlog = (blog) => async (dispatch) => {
+  try {
+    const updatedBlog = await blogsService.giveLike(blog);
+    dispatch(blogLiked(updatedBlog));
+  } catch (error) {
+    dispatch(notify('error', error.response.data.error));
+  }
+};
+
+export const removeBlog = (id) => async (dispatch) => {
+  try {
+    await blogsService.remove(id);
+    dispatch(blogRemoved(id));
+  } catch (error) {
+    dispatch(notify('error', error.response.data.error));
+  }
+};
+
 export default blogsSlice.reducer;

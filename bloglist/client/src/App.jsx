@@ -34,26 +34,6 @@ const App = () => {
     setUser(null);
   };
 
-  const likeBlog = async (blog) => {
-    try {
-      const updatedBlog = await blogService.giveLike(blog);
-      setBlogs(blogs.map((b) => (b.id === updatedBlog.id ? updatedBlog : b)));
-    } catch (error) {
-      dispatch(notify('error', error.response.data.error));
-    }
-  };
-
-  const removeBlog = async (blog) => {
-    if (!window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) return;
-
-    try {
-      await blogService.remove(blog.id);
-      setBlogs(blogs.filter((b) => b.id !== blog.id));
-    } catch (error) {
-      dispatch(notify('error', error.response.data.error));
-    }
-  };
-
   if (!user) {
     return (
       <div>
@@ -81,8 +61,6 @@ const App = () => {
             key={blog.id}
             blog={blog}
             fromUser={user.username === blog.user.username}
-            onLike={() => likeBlog(blog)}
-            onRemove={() => removeBlog(blog)}
           />
         ))}
     </div>
