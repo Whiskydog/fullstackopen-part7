@@ -1,0 +1,7 @@
+[build]
+command = "sed -i \"s|REDIRECT_PLACEHOLDER|${PROD_API_LOCATION}|g\" netlify.toml && npm run build"
+
+[[redirects]]
+  from = "/api/*"
+  to = "REDIRECT_PLACEHOLDER/api/:splat"
+  status = 200
