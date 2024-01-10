@@ -1,7 +1,10 @@
-const Notification = ({ spec }) => {
-  if (!spec) return null;
+import { useSelector } from 'react-redux';
 
-  const { type, content } = spec;
+const Notification = () => {
+  const { type, content, visible } = useSelector((state) => state);
+
+  if (!visible) return null;
+
   const styles = {
     fontSize: '1.5rem',
     border: '4px solid',
