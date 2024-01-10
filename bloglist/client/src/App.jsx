@@ -5,18 +5,18 @@ import blogService from './services/blogs';
 import CreateBlogForm from './components/CreateBlogForm';
 import Notification from './components/Notification';
 import Toggle from './components/Toggle';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { notify } from './reducers/notification';
+import { loadBlogs } from './reducers/blogs';
 
 const App = () => {
-  const [blogs, setBlogs] = useState([]);
+  const blogs = useSelector((state) => state.blogs);
   const [user, setUser] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const updateBlogs = async () => setBlogs(await blogService.getAll());
-    updateBlogs();
-  }, []);
+    dispatch(loadBlogs());
+  }, [dispatch]);
 
   useEffect(() => {
     const userFromStorage = window.localStorage.getItem('user');
@@ -27,22 +27,11 @@ const App = () => {
     }
   }, []);
 
-  const createBlogFormRef = useRef();
+  const toggleRef = useRef();
 
   const handleLogout = () => {
     window.localStorage.removeItem('user');
     setUser(null);
-  };
-
-  const addBlog = async (blogData) => {
-    createBlogFormRef.current.toggle();
-    try {
-      const blog = await blogService.create(blogData);
-      setBlogs(blogs.concat(blog));
-      dispatch(notify('success', `A new blog ${blog.title} added`));
-    } catch (error) {
-      dispatch(notify('error', error.response.data.error));
-    }
   };
 
   const likeBlog = async (blog) => {
@@ -82,8 +71,8 @@ const App = () => {
       <p>
         {user.name} logged in <button onClick={handleLogout}>logout</button>
       </p>
-      <Toggle label="New blog" ref={createBlogFormRef}>
-        <CreateBlogForm createBlog={addBlog} />
+      <Toggle label="New blog" ref={toggleRef}>
+        <CreateBlogForm toggleRef={toggleRef} />
       </Toggle>
       {blogs
         .toSorted((a, b) => b.likes - a.likes)

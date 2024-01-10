@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
 const Notification = () => {
-  const { type, content, visible } = useSelector((state) => state);
+  const { type, content, visible } = useSelector((state) => state.notification);
 
   if (!visible) return null;
 
