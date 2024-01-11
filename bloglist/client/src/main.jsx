@@ -5,6 +5,7 @@ import store from './store';
 import App from './App';
 import Blogs from './routes/Blogs';
 import Users from './routes/Users';
+import UserDetails from './routes/UserDetails';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path: 'users',
         element: <Users />,
+      },
+      {
+        path: 'users/:id',
+        element: <UserDetails />,
       },
     ],
   },

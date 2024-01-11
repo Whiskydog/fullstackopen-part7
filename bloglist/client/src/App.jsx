@@ -3,6 +3,7 @@ import { Outlet } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { loadUser, logOffUser } from './reducers/user';
 import { loadBlogs } from './reducers/blogs';
+import { loadUsers } from './reducers/users';
 import Notification from './components/Notification';
 import Login from './routes/Login';
 
@@ -11,8 +12,9 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(loadBlogs());
     dispatch(loadUser());
+    dispatch(loadBlogs());
+    dispatch(loadUsers());
   }, [dispatch]);
 
   const handleLogout = () => {

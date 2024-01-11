@@ -1,21 +1,18 @@
-import { useEffect } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { loadUsers } from '../reducers/users';
+import { shallowEqual, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 const Users = () => {
-  const dispatch = useDispatch();
-  const userDetails = useSelector(
+  const usersDetails = useSelector(
     (state) =>
       state.users.map((user) => ({
+        id: user.id,
         name: user.name,
         blogCount: user.blogs.reduce((acc) => acc + 1, 0),
       })),
     shallowEqual
   );
 
-  useEffect(() => {
-    dispatch(loadUsers());
-  }, [dispatch]);
+  if (!usersDetails.length) return <div>Loading...</div>;
 
   return (
     <>
@@ -28,9 +25,11 @@ const Users = () => {
           </tr>
         </thead>
         <tbody>
-          {userDetails.map((user) => (
-            <tr key={user.name}>
-              <td>{user.name}</td>
+          {usersDetails.map((user) => (
+            <tr key={user.id}>
+              <td>
+                <Link to={user.id}>{user.name}</Link>
+              </td>
               <td>{user.blogCount}</td>
             </tr>
           ))}
