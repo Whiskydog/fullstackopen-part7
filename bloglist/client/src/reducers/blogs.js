@@ -8,7 +8,7 @@ const blogsSlice = createSlice({
   reducers: {
     blogsLoaded: (state, action) => action.payload,
     blogAdded: (state, action) => state.concat(action.payload),
-    blogLiked: (state, action) =>
+    blogUpdated: (state, action) =>
       state.map((blog) =>
         blog.id !== action.payload.id ? blog : action.payload
       ),
@@ -17,7 +17,7 @@ const blogsSlice = createSlice({
   },
 });
 
-const { blogAdded, blogsLoaded, blogLiked, blogRemoved } = blogsSlice.actions;
+const { blogAdded, blogsLoaded, blogUpdated, blogRemoved } = blogsSlice.actions;
 
 export const loadBlogs = () => async (dispatch) => {
   const blogs = await blogsService.getAll();
@@ -37,7 +37,7 @@ export const addBlog = (blogData) => async (dispatch) => {
 export const likeBlog = (blog) => async (dispatch) => {
   try {
     const updatedBlog = await blogsService.giveLike(blog);
-    dispatch(blogLiked(updatedBlog));
+    dispatch(blogUpdated(updatedBlog));
   } catch (error) {
     dispatch(notify('error', error.response.data.error));
   }
@@ -47,6 +47,15 @@ export const removeBlog = (id) => async (dispatch) => {
   try {
     await blogsService.remove(id);
     dispatch(blogRemoved(id));
+  } catch (error) {
+    dispatch(notify('error', error.response.data.error));
+  }
+};
+
+export const commentBlog = (id, comment) => async (dispatch) => {
+  try {
+    const blog = await blogsService.addComment(id, comment);
+    dispatch(blogUpdated(blog));
   } catch (error) {
     dispatch(notify('error', error.response.data.error));
   }

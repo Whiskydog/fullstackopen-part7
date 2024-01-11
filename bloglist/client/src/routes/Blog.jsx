@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { likeBlog, removeBlog } from '../reducers/blogs';
 import { useNavigate, useParams } from 'react-router-dom';
+import CommentForm from '../components/CommentForm';
 
 const Blog = () => {
   const { id } = useParams();
@@ -46,6 +47,7 @@ const Blog = () => {
         </div>
       </div>
       <h3>Comments</h3>
+      <CommentForm blogId={blog.id} />
       <ul>
         {blog.comments.map((comment) => (
           <li key={comment.id}>{comment.content}</li>
