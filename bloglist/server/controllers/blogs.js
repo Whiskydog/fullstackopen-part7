@@ -37,6 +37,19 @@ blogsRouter.post('/', async (request, response, next) => {
   }
 });
 
+blogsRouter.post('/:id/comments', async (request, response, next) => {
+  const { id } = request.params;
+  try {
+    const blog = await Blog.findById(id);
+    blog.comments.push({ content: request.body.comment });
+    await blog.save();
+    await blog.populate('user', 'username name');
+    response.status(201).json(blog);
+  } catch (error) {
+    next(error);
+  }
+});
+
 blogsRouter.delete('/:id', async (request, response, next) => {
   const blogId = request.params.id;
   const tokenUserId = request.auth.id;

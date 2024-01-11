@@ -45,6 +45,12 @@ const Blog = () => {
           {ownedByUser && <button onClick={handleRemove}>remove</button>}
         </div>
       </div>
+      <h3>Comments</h3>
+      <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment.id}>{comment.content}</li>
+        ))}
+      </ul>
     </div>
   );
 };

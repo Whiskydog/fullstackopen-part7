@@ -7,7 +7,7 @@ usersRouter.get('/', async (_request, response, next) => {
   try {
     const users = await User.find({}).populate(
       'blogs',
-      'title author url likes'
+      'title author url likes comments'
     );
     response.json(users);
   } catch (error) {
