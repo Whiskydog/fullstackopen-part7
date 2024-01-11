@@ -2,12 +2,19 @@ import { useRef } from 'react';
 import { useSelector } from 'react-redux';
 import Toggle from '../components/Toggle';
 import CreateBlogForm from '../components/CreateBlogForm';
-import Blog from '../components/Blog';
+import { Link } from 'react-router-dom';
 
 const Blogs = () => {
   const blogs = useSelector((state) => state.blogs);
-  const user = useSelector((state) => state.user);
   const toggleRef = useRef();
+
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5,
+  };
 
   return (
     <div>
@@ -17,11 +24,9 @@ const Blogs = () => {
       {blogs
         .toSorted((a, b) => b.likes - a.likes)
         .map((blog) => (
-          <Blog
-            key={blog.id}
-            blog={blog}
-            fromUser={user.username === blog.user.username}
-          />
+          <div key={blog.id} style={blogStyle}>
+            <Link to={`blogs/${blog.id}`}>{blog.title}</Link>
+          </div>
         ))}
     </div>
   );
