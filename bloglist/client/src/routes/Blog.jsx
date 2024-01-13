@@ -1,20 +1,27 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { likeBlog, removeBlog } from '../reducers/blogs';
 import { useNavigate, useParams } from 'react-router-dom';
-import CommentForm from '../components/CommentForm';
+import {
+  Button,
+  Divider,
+  Header,
+  HeaderContent,
+  HeaderSubheader,
+  Icon,
+  Label,
+  LabelDetail,
+  Segment,
+} from 'semantic-ui-react';
+import Comments from '../components/Comments';
 
 const Blog = () => {
   const { id } = useParams();
   const blog = useSelector((state) =>
     state.blogs.find((blog) => blog.id === id)
   );
-  const currentUsername = useSelector((state) => state.user.username);
+  const currentUsername = useSelector((state) => state.user.user.username);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleLike = () => {
-    dispatch(likeBlog(blog));
-  };
 
   const handleRemove = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}`)) {
@@ -28,32 +35,50 @@ const Blog = () => {
   const ownedByUser = currentUsername === blog.user.username;
 
   return (
-    <div className="blog">
-      <h2>
-        {blog.title} {blog.author}
-      </h2>
-      <div>
-        <div>
-          <a href={blog.url} target="_blank" rel="noreferrer">
-            {blog.url}
-          </a>
-        </div>
-        <div>
-          likes {blog.likes} <button onClick={handleLike}>like</button>
-        </div>
-        <div>
-          Added by {blog.user.name}{' '}
-          {ownedByUser && <button onClick={handleRemove}>remove</button>}
-        </div>
+    <Segment className="blog">
+      <Header as="h2">
+        <HeaderContent>
+          {blog.title}
+          <HeaderSubheader>{blog.author}</HeaderSubheader>
+        </HeaderContent>
+      </Header>
+      <Label>
+        Added by <LabelDetail>{blog.user.name}</LabelDetail>
+      </Label>
+      <Divider />
+      <div style={{ display: 'flex', gap: '1rem' }}>
+        <Button
+          as="a"
+          href={blog.url}
+          target="_blank"
+          icon
+          labelPosition="right"
+        >
+          READ BLOG
+          <Icon name="external" />
+        </Button>
+        <Button
+          as="div"
+          labelPosition="right"
+          onClick={() => dispatch(likeBlog(blog))}
+        >
+          <Button icon color="blue">
+            <Icon name="thumbs up" />
+            Like
+          </Button>
+          <Label basic color="blue" pointing="left">
+            {blog.likes}
+          </Label>
+        </Button>
+        {ownedByUser && (
+          <Button color="red" onClick={handleRemove}>
+            <Icon name="delete" />
+            Remove
+          </Button>
+        )}
       </div>
-      <h3>Comments</h3>
-      <CommentForm blogId={blog.id} />
-      <ul>
-        {blog.comments.map((comment) => (
-          <li key={comment.id}>{comment.content}</li>
-        ))}
-      </ul>
-    </div>
+      <Comments blogId={blog.id} comments={blog.comments} />
+    </Segment>
   );
 };
 

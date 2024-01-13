@@ -1,13 +1,14 @@
+import { Header, Segment } from 'semantic-ui-react';
 import LoginForm from '../components/LoginForm';
-import Notification from '../components/Notification';
 
 const Login = () => {
   return (
-    <div>
-      <h2>Please log in</h2>
-      <Notification />
+    <Segment basic padded="very">
+      <Header as="h2" textAlign="center">
+        Please log in
+      </Header>
       <LoginForm />
-    </div>
+    </Segment>
   );
 };
 

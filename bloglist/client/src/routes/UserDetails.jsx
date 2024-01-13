@@ -1,5 +1,6 @@
 import { shallowEqual, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { Divider, Header, List, ListItem, Segment } from 'semantic-ui-react';
 
 const UserDetails = () => {
   const { id } = useParams();
@@ -11,15 +12,16 @@ const UserDetails = () => {
   if (!user) return <div>Loading...</div>;
 
   return (
-    <div>
-      <h2>{user.name}</h2>
-      <h3>Added blogs</h3>
-      <ul>
+    <Segment>
+      <Header as="h2">{user.name}</Header>
+      <Divider />
+      <Header as="h3">Added blogs</Header>
+      <List celled relaxed>
         {user.blogs.map((blog) => (
-          <li key={blog.id}>{blog.title}</li>
+          <ListItem key={blog.id}>{blog.title}</ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Segment>
   );
 };
 

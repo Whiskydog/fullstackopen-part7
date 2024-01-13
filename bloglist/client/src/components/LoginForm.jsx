@@ -1,45 +1,53 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { logInUser } from '../reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../reducers/user';
+import {
+  Form,
+  FormButton,
+  FormInput,
+  Grid,
+  GridColumn,
+  Message,
+} from 'semantic-ui-react';
 
 const LoginForm = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.user);
 
   const handleLogin = async (event) => {
     event.preventDefault();
-    dispatch(logInUser(username, password));
+    dispatch(loginUser({ username, password }));
     setUsername('');
     setPassword('');
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <div>
-        <label>
-          username
-          <input
-            type="text"
+    <Grid centered>
+      <GridColumn width={7}>
+        <Form
+          onSubmit={handleLogin}
+          loading={status === 'pending'}
+          error={status === 'rejected'}
+        >
+          <FormInput
+            label="Username"
             name="username"
             value={username}
             onChange={({ target }) => setUsername(target.value)}
           />
-        </label>
-      </div>
-      <div>
-        <label>
-          password
-          <input
+          <FormInput
+            label="Password"
             type="password"
-            name="password"
             value={password}
             onChange={({ target }) => setPassword(target.value)}
           />
-        </label>
-      </div>
-      <button>login</button>
-    </form>
+          <FormButton>Log in</FormButton>
+          <Message error>{error}</Message>
+        </Form>
+      </GridColumn>
+    </Grid>
   );
 };
 

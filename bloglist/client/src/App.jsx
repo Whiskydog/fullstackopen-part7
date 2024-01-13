@@ -6,7 +6,8 @@ import { loadBlogs } from './reducers/blogs';
 import { loadUsers } from './reducers/users';
 import Notification from './components/Notification';
 import Login from './routes/Login';
-import Menu from './components/Menu';
+import NavMenu from './components/NavMenu';
+import { Segment } from 'semantic-ui-react';
 
 const App = () => {
   const user = useSelector((state) => state.user);
@@ -18,15 +19,18 @@ const App = () => {
     dispatch(loadUsers());
   }, [dispatch]);
 
-  if (!user) return <Login />;
+  if (!user.user) {
+    return <Login />;
+  }
 
   return (
-    <div>
-      <Menu />
-      <h2>Blogs</h2>
-      <Notification />
-      <Outlet />
-    </div>
+    <Segment basic>
+      <NavMenu />
+      <main>
+        <Notification />
+        <Outlet />
+      </main>
+    </Segment>
   );
 };
 

@@ -7,6 +7,7 @@ import Blogs from './routes/Blogs';
 import Users from './routes/Users';
 import UserDetails from './routes/UserDetails';
 import Blog from './routes/Blog';
+import 'semantic-ui-css/semantic.min.css';
 
 const router = createBrowserRouter([
   {

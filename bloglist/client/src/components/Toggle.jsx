@@ -1,5 +1,6 @@
 import { forwardRef, useImperativeHandle, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Button, Segment } from 'semantic-ui-react';
 
 const Toggle = forwardRef(({ label, children }, ref) => {
   const [visible, setVisible] = useState(false);
@@ -7,12 +8,16 @@ const Toggle = forwardRef(({ label, children }, ref) => {
   useImperativeHandle(ref, () => ({ toggle: () => setVisible(!visible) }));
 
   return visible ? (
-    <div>
+    <Segment>
       {children}
-      <button onClick={() => setVisible(false)}>Cancel</button>
-    </div>
+      <Button color="red" onClick={() => setVisible(false)}>
+        Cancel
+      </Button>
+    </Segment>
   ) : (
-    <button onClick={() => setVisible(true)}>{label}</button>
+    <Button color="green" onClick={() => setVisible(true)}>
+      {label}
+    </Button>
   );
 });
 

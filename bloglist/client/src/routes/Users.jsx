@@ -1,5 +1,15 @@
 import { shallowEqual, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {
+  Header,
+  Segment,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+} from 'semantic-ui-react';
 
 const Users = () => {
   const usersDetails = useSelector(
@@ -15,27 +25,27 @@ const Users = () => {
   if (!usersDetails.length) return <div>Loading...</div>;
 
   return (
-    <>
-      <h2>Users</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>User name</th>
-            <th>Blogs created</th>
-          </tr>
-        </thead>
-        <tbody>
+    <Segment>
+      <Header as="h2">Users</Header>
+      <Table celled>
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell>User name</TableHeaderCell>
+            <TableHeaderCell>Blogs created</TableHeaderCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {usersDetails.map((user) => (
-            <tr key={user.id}>
-              <td>
+            <TableRow key={user.id}>
+              <TableCell selectable>
                 <Link to={user.id}>{user.name}</Link>
-              </td>
-              <td>{user.blogCount}</td>
-            </tr>
+              </TableCell>
+              <TableCell>{user.blogCount}</TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
-    </>
+        </TableBody>
+      </Table>
+    </Segment>
   );
 };
 
